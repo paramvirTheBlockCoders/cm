@@ -12,10 +12,12 @@ export default async function handler(req, res) {
       // });
       var config = {
         method: "post",
+
         url: "http://44.200.180.0:7777/api/v1/admin/gettotal",
         headers:{
           'Authorization': `Bearer ${token}`,
       },data, 
+
       };
       await axios(config).then(function (response) {
         console.log(JSON.stringify(response.data));

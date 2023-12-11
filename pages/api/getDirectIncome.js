@@ -7,7 +7,9 @@ export default async function handler(req, res) {
     try {
       var config = {
         method: "post",
-        url: "http://52.45.20.15:4000/api/v1/member/getUserIncome",
+
+        url: "http://16.171.110.81:3000/api/admin/getalluser",
+
         headers: {
           Authorization: `Bearer ${session.user.name} `,
         },
