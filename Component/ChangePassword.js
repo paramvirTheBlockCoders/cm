@@ -3,218 +3,225 @@ import axios from "axios";
 import changePassword from "../pages/changePassword";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
-import Arrow from "../public/arrow.svg";
-import Link from "next/link";
-import Button from "react-bootstrap/Button";
+import Link  from "next/link";
+import Button from 'react-bootstrap/Button';
+import { Alert } from "react-bootstrap";
+import SideBar from "./SideBar";
+import Navbar from "./ui/Navbar";
+
+
+
+
 
 const ChangePassword = () => {
-  const oldPasswordInputRef = useRef();
-  const newPasswordInputRef = useRef();
-  const confirmPasswordInputRef = useRef();
+  const oldPasswordRef = useRef()
+  const newPasswordRef= useRef()
+  const confirmPasswordRef = useRef()
   
-  const [error, setError] = useState(false);
-  const [verify, setVerify] = useState(false);
+  const [isValid, setIsValid] = useState(false);
+  const [error, setError]= useState(false)
+  const [errorValid, setErrorValid]= useState(false)
+  const [verify, setVerify]=useState(false)
+  const [isPasswordValid, setIsPasswordValid ] = useState(false)
+
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingRef, setLoadingRef] = useState(false);
-  const router = useRouter();
-
-  function simulateNetworkRequest() {
-    return new Promise((resolve) => setTimeout(resolve, 4000));
-  }
 
 
-  function onClickHandler(event) {
-    event.preventDefault();
 
-    const oldPassword = oldPasswordInputRef.current.value;
-    const newPassword = newPasswordInputRef.current.value;
-    const confirmPassword = confirmPasswordInputRef.current.value;
+function simulateNetworkRequest() {
+  return new Promise((resolve) => setTimeout(resolve, 4000));
+}
 
-    if (!oldPassword || !newPassword || !confirmPassword) {
-      notifyError("Please fill all the details");
-      return;
-    }
 
-    if (!(newPassword === confirmPassword)) {
-      notifyError("Password doesn't match");
-      return;
-    }
+  const  router = useRouter()
 
-    if (oldPassword === newPassword) {
-      notifyError("Old Password and New Password can't be same");
-      return;
-    }
-    sendcode();
-  }
-
-  async function changePassword (data) {
-    try{
-      let res = await axios.post ("/api/changepassword",data);
-      const response = res.data;
-      console.log(response,"to check the whether working or not")
-      notify("Password Changed Successfully");
-      setTimeout(() => {
-        router.push("/dashboard");
-      },1000);
-    }
-    catch(err) {
-      notifyError("Something Went Wrong to change the password")
-    }
-  }
-
-  function formSubmitHandler(event) {
-    event.preventDefault();
-
-    const oldPassword = oldPasswordInputRef.current.value;
-      const newPassword = newPasswordInputRef.current.value;
-      const confirmPassword = confirmPasswordInputRef.current.value;
+  
+  async function changePass(data) {
+    try {
+      let res = await axios.post("/api/changePassword",data);
+      const resend = res.data;
+      setLoadingRef(true)
+      setIsLoading(true)
+      notify(' Successfully changed password')
+      setVerify(true)
+      setErrorValid(false)
       
+  
+      setTimeout(()=>{
+
+        router.push('/dashboard')
+      },3000)
+  
       
-      if (!(newPassword === confirmPassword)) {
-        notifyError("Password doesn't match");
-        setError(true);
-        return;
-      }
-      const data = {
-        oldPassword,
-        newPassword,
-        confirmPassword
-      };
-
-      console.log(data, "data entered by the user");
-    
-      changePassword(data);
+    } catch (err) {
+      console.log(err, "SomeThing Went Wrong");
+      notifyError(' Invalid detail')
+      setErrorValid(true)
+  
     }
 
-  const notify = (msg) =>
-    toast.success(msg, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+  }
+
+
+function onSubmitHandler(e){
+  e.preventDefault()
+
+
+
+  const password = oldPasswordRef.current.value
+  const newPassword = newPasswordRef.current.value
+  const confirmPassword = confirmPasswordRef.current.value
+  // const otp = sendCodeRef.current.value
+
+const data = {
+  password,
+  newPassword,
+  // otp
+}
+setError(false)
+setErrorValid(false)
+
+if (!(newPassword===confirmPassword)) {
+  notifyError("Password doesn't match")
+  setError(true)
+  setErrorValid(false)
+
+  return;
+}
+
+
+
+setIsPasswordValid(false)
+changePass(data)
+}
+
+const notify = (msg) =>
+toast.success(msg, {
+  position: "top-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+});
+
+const notifyError = (msg) =>
+toast.error(msg, {
+  position: "top-right",
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+});
+
+
+
+
+useEffect(() => {
+  if (isLoading) {
+    simulateNetworkRequest().then(() => {
+      setLoadingRef(true);
     });
+  }
+}, [isLoading]);
 
-  const notifyError = (msg) =>
-    toast.error(msg, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+const handleClick = () =>
 
-  useEffect(() => {
-    if (isLoading) {
-      simulateNetworkRequest().then(() => {
-        setLoadingRef(true);
-      });
-    }
-  }, [isLoading]);
+setLoadingRef(false);
 
-  const handleClick = () => setLoadingRef(false);
+
+
 
   return (
-    <div>
-      <section className="profile-sec">
+    <div className="new-dashboard">
+     <SideBar/>
+      <section className="profile-sec profile-sects" >
         <div className="container">
           <div className="row justify-content-center">
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-            <form
-              className="input-sec"
-              id="form-setting"
-              onSubmit={formSubmitHandler}
-            >
+            <Navbar/>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+            <form className="input-sec" id="form-setting" onSubmit={onSubmitHandler} >
               <div className="line profile-line" id="ch-line"></div>
               <h3 className="heading-text pink-text mt-2 ">
-                <Link href={"/dashboard"}>
-                  <span
-                    className="arrows-icon"
-                    style={{
-                      position: "relative",
-                      left: "-23%",
-                      cursor: "pointer",
-                    }}
-                  >
+              {/* <Link href={'/dashboard'}>
+              <span  className="arrows-icon" style={{ position: "relative", left: "-21%", cursor:"pointer" }}  >
                     <img src={Arrow.src} />
                   </span>
-                </Link>
-                Change Password
-              </h3>
+                  </Link> */}
+                 Change Password</h3>
+                 
+
 
               <div className="input-item item-set mt-5">
                 <h6 className="item-text">OLD PASSWORD</h6>
-                <input
-                  ref={oldPasswordInputRef}
-                  required
-                  className="textinput"
-                  type="password"
-                  name="password"
-                />
+                <input ref={oldPasswordRef}  required className="textinput" type="password" name="password" />
               </div>
 
               <div className="input-item item-set">
                 <h6 className="item-text">NEW PASSWORD</h6>
-                <input
-                  ref={newPasswordInputRef}
-                  required
-                  className="textinput"
-                  type="password"
-                  name="password"
-                />
+                <input ref={newPasswordRef} required className="textinput" type="password" name="password" />
+              {isPasswordValid && <Alert style={{margin:"0"}} variant={"danger"}>Your password must be at least 8 characters long, should contain at least one number or special character and have a mixture of uppercase and lowercase letters.</Alert>}
               </div>
 
-              <div className="input-item item-set">
-                <h6 className="item-text">CONFIRMPASSWORD</h6>
-                <input
-                  ref={confirmPasswordInputRef}
-                  required
-                  className="textinput"
-                  type="password"
-                  name="confirmpassword"
-                />
-                {error && (
-                  <p style={{ color: "red" }}> Password doesn't match </p>
-                )} 
-                 {verify && (
-                  <p style={{ color: "green" }}> Password doesn't match </p>
-                )}
+              <div className="input-item item-set mb-5">
+                <h6 className="item-text">CONFIRM PASSWORD</h6>
+                <input ref={confirmPasswordRef} required className="textinput" type="password" name="confirmpassword" />
+                {isValid && (<p style={{ color: "red" }}> Password doesn't match </p>)}
               </div>
-             
-          
+         
+
               {error && (
-                <p style={{ color: "red", fontSize: "15px", margin: "0px" }}> 
-                Password doesn't match </p>
-              )}
-              {verify && (
-                <p style={{ color: "green", fontSize: "15px", margin: "0" }}>
-                  Change Successfuly{" "}
-                </p>
-              )}
-              <Button
-                variant="primary"
+                  <p style={{ color: "red" }}> Password doesn't match </p>
+                )}
+                    {errorValid && (
+                  <p style={{ color: "red",  }}> Invalid detail </p>
+                )}
+                       {verify && (
+                  <p style={{ color: "green",  }}> Successfully changed password </p>
+                )}
+              {/* <button  Your password must be at least 8 characters long, should
+                      contain at least one number and special character have a
+                      mixture of uppercase and lowercase letters.
+                href="funds-page.html"
                 className="btn btn-round btn-warning w-100 "
                 style={{ marginTop: "0px", marginBottom: "0px" }}
                 type="submit"
-                disabled={isLoading}
-                onClick={!isLoading ? handleClick : null}
               >
-                {isLoadingRef ? "Loading…" : "     UPDATE"}
-              </Button>
+                UPDATE
+              </button> */}
+
+              <Button
+      variant="primary"
+      className="btn btn-round btn-warning w-100 "
+      style={{ marginTop: "0px", marginBottom: "0px" }}
+      type="submit"
+      disabled={isLoading}
+      onClick={!isLoading ? handleClick : null}
+      >
+      {isLoadingRef ? 'Loading…' : '     UPDATE'}
+    </Button>
+    {/* <Link href={'/emailVerify'}>
+              <p className="by-text" style={{cursor:"pointer", marginTop:"5px", fontSize:"13px", color:"#2990DF"}}>
+                
+                {" "}
+             Forgot your password?
+              </p>
+              </Link> */}
+         
             </form>
           </div>
         </div>
@@ -223,4 +230,4 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default ChangePassword

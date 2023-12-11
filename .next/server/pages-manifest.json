@@ -2,11 +2,14 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/api/login": "pages/api/login.js",
+  "/api/leftRightCount": "pages/api/leftRightCount.js",
+  "/api/getUserDirectIncome": "pages/api/getUserDirectIncome.js",
+  "/profile": "pages/profile.js",
+  "/changePassword": "pages/changePassword.js",
+  "/directIncome": "pages/directIncome.js",
+  "/2fa": "pages/2fa.js",
+  "/api/2fa": "pages/api/2fa.js",
   "/dashboard": "pages/dashboard.js",
-  "/total": "pages/total.js",
-  "/api/totalUser": "pages/api/totalUser.js",
-  "/myRefferals": "pages/myRefferals.js",
-  "/api/myrefferals": "pages/api/myrefferals.js"
+  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
+  "/teamCount": "pages/teamCount.js"
 }

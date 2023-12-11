@@ -1,18 +1,18 @@
-import React from 'react';
-import RegistrationPage from '../Component/RegistrationPage';
-import {getSession} from 'next-auth/react';
+import React from 'react'
+import Registration from '../Component/Registration'
+import {getSession} from 'next-auth/react'
 
 
-const registrationPage = () => {
+const index = () => {
   return (
     <div>
-        <RegistrationPage/>
-  
+      <Registration/>
     </div>
   )
 }
 
-export default registrationPage;
+export default index
+
 
 // export async function getServerSideProps(context) {
 //   const session = await getSession(context)

@@ -1,15 +1,20 @@
+
+
+
 import React from 'react'
-import Dashboard from '../Component/Dashboard'
-import {getSession} from 'next-auth/react';
-const dashboard = () => {
+import NewDashboard from '../Component/NewDashboard'
+import {getSession} from 'next-auth/react'
+
+const newDashboard = () => {
   return (
     <div>
-    <Dashboard/>
+
+        <NewDashboard/>
     </div>
   )
 }
 
-export default dashboard
+export default newDashboard
 
 // export async function getServerSideProps(context) {
 //   const session = await getSession(context)

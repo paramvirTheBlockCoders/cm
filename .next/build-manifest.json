@@ -15,10 +15,10 @@
     "static/development/_middlewareManifest.js"
   ],
   "pages": {
-    "/": [
+    "/2fa": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/index.js"
+      "static/chunks/pages/2fa.js"
     ],
     "/_app": [
       "static/chunks/webpack.js",
@@ -30,20 +30,30 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
+    "/changePassword": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/changePassword.js"
+    ],
     "/dashboard": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/dashboard.js"
     ],
-    "/myRefferals": [
+    "/directIncome": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/myRefferals.js"
+      "static/chunks/pages/directIncome.js"
     ],
-    "/total": [
+    "/profile": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/total.js"
+      "static/chunks/pages/profile.js"
+    ],
+    "/teamCount": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/teamCount.js"
     ]
   },
   "ampFirstPages": []

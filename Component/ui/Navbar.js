@@ -1,48 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { Collapse, Dropdown } from "react-bootstrap";
+import { Collapse } from "react-bootstrap";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import axios from "axios";
-import {signOut, useSession}  from 'next-auth/react';
+import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(null);
-  const router  = useRouter();
-  // const {data:session} = useSession();
-
+  const { data: session } = useSession();
+  const [tokenData, setTokenData]= useState()
 
   // async function getUserData() {
-  //   let data = await axios.post("api/profile");
-  //   setName(data.data.data);
-  //   // console.log(name,"to show the name")
+  //   let data = await axios.post("api/userProfile");
+  //   // setName(data.data.data);
+  // }
+  const router = useRouter();
+  const refCode = router.query;
+
+  // async function getUserStatus() {
+  //   try {
+  //     console.log("get useer name hit");
+  //     // const token = localStorage.getItem("token");
+  //     let res = await axios.post("/api/getuserid");
+  //     const response = res.data;
+  //     setTokenData(response.data.data)
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
   // }
 
-  // useEffect(()=>{
-  //   if(session){
-  // getUserData();
-  //   }
-  //   },[])
+  useEffect(()=>{
+    if(session) {
+      // getUserStatus();
+    }
+  },[])
 
-  function logOutHandler() {
-    router.push("/")
-    window.localStorage.clear();
-    // window.location.reload();
+
+
+  // useEffect(() => {
+  //   if (session) {
+  //     getUserData();
+  //   }
+  // }, []);
+
+  function logoutHandler() {
+    signOut('/login');
+    router.push('/login')
+    window.localStorage.clear()
   }
 
   return (
     <>
       <header>
-        <nav className="navbar navbar-expand-lg top-nav navbar-light bg-light">
+        <nav className="navbar navbar-expand-lg top-nav ">
           <div className="container-fluid" id="fluid-set">
-            <a className="navbar-brand" href="#" id="href-set">
-              {" "}
-              <img style={{ height: "80px" }} 
-              // src="/AyewaLogo.png"
-               /><h1><strong>LUDO</strong></h1>
-            </a>
-            <button
-              onClick={() => setOpen(!open)}
+          {!session ? (
+            <a className="navbar-brand" href="/" id="href-setts" >
+              Welcome {tokenData?.firstName}
+              {/* <img id="logo-id" style={{ marginLeft: "-10px" }} src="/navbar/stier.png"/> */}
+            </a>):null}
+              <img style={{ marginLeft: "-10px" }}  />
+            {/* <button
+              // onClick={() => setOpen(!open)}
               className="navbar-toggler"
               type="button"
               data-bs-toggle="collapse"
@@ -52,97 +72,59 @@ const Navbar = () => {
               aria-label="Toggle navigation"
             >
               <span className="navbar-toggler-icon"></span>
-            </button>
-           <Collapse in={open}>
+            </button> */}
+            {/* <Collapse> */}
               <div
-                className="collapse navbar-collapse"
-                id="navbarSupportedContent"
-                style={{ justifyContent: "flex-end", position:"absolute", right:"3%", marginRight:"0px !important", margin:"0" }}
+                // className="collapse "
+                // id="navbarSupportedContent"
+                // style={{ justifyContent: "flex-end", position:"absolute", right:"3%", marginRight:"0px !important", margin:"0" }}
               >
                 <ul
                   className="navbar-nav mb-2 mb-lg-0"
                   style={{ marginLeft: "auto !important" }}
-                 >
-                  {/* {session ? (
-                    <li className="nav-item">
-                      <Link href={"/dashboard"}>
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          DASHBOARD
-                        </a>
-                      </Link>
-                    </li>
-                  ) : null} */}
-                  {/* {session ? (
-                    <li className="nav-item">
-                      <Link href={"/funds"}>
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          FUNDS
-                        </a>
-                      </Link>
-                    </li>
-                  ) : null} */}
-                    {/* {session ? (
-                    <li className="nav-item">
-                      <Link href={"/stakings"}>
-                        <a
-                          className="nav-link active"
-                          aria-current="page"
-                          href="#"
-                        >
-                          FUNDS
-                        </a>
-                      </Link>
-                    </li>
-                  ) : null} */}
-                  {/* {session ? (
-                    <li className="nav-item">
+             >
+            
+            {!session ? (
+                    <li className="nav-item" id="bg-navbar">
                       <a
-                        className="nav-link active"
+                        className="nav-link active total-account"
                         aria-current="page"
                         href="#"
+                       
                       >
-                        SETTING
+                      <i style={{fontSize:"18px"}} className="fa-regular fa-bell" id="i-nav"></i>
                       </a>
                     </li>
-                  ) : null} */}
-                  {/* {session ? (
-                    <li className="nav-item">
+                  ) : null}
+                        
+            {!session ? (
+                    <li className="nav-item" id="bg-navbar">
                       <a
-                        className="nav-link active"
+                        className="nav-link active total-account"
                         aria-current="page"
                         href="#"
+                       
                       >
-                        WELCOME {name?.name}{" "}
+                  <i style={{fontSize:"18px"}} className="fa-regular fa-circle-question" id="i-nav"></i>
                       </a>
                     </li>
-                  ) : null} */}
+                  ) : null}
 
-                 {/* {session ? ( */}
-                    <li className="nav-item">
-                      {/* <Link href={"/"}> */}
-                        <button onClick={logOutHandler}
-                        //  onClick={()=>signOut('/login')}
-                          className="btn btn-outline-success border-btn"
-                          style={{ marginRight: "10px" }}
+            {!session ? (
+                    <li className="nav-item p-0" id="bg-navbar">
+                        <a onClick={logoutHandler}
+                          className="nav-link active total-account "
+                          // style={{ marginBottom: "-10px", padding:"0" }}
                           type="submit"
                         >
-                          Logout
-                        </button>
-                      {/* </Link> */}
+                       <img src="/navbar/logout.png"/>
+                        </a>
                     </li>
-                  {/* ) : null} */}
+                  ) : null}
 
-                  {/* {!session ? ( */}
+                  {/* {!session ? (
                     <li className="nav-item">
-                      <Link href={"/login"}>
+                      <Link href={"/"}>
                         <button
                           className="btn btn-outline-success border-btn"
                           type="submit"
@@ -151,15 +133,17 @@ const Navbar = () => {
                         </button>
                       </Link>
                     </li>
-                  {/* ): null} */}
-                
+                  ) : null} */}
+
                 </ul>
               </div>
-            </Collapse>
-                  {/* {session ? (
+            {/* </Collapse> */}
+
+            {/* {!session ? (
                     <li className="nav-item">
-                      <Link href={"/login"}>
+                      <Link href={"/"}>
                         <button
+                          onClick={logoutHandler}
                           className="btn btn-outline-success border-btn"
                           style={{ marginRight: "10px" }}
                           type="submit"
